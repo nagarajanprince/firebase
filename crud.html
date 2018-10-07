@@ -1,72 +1,194 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Firebase CRUD</title>
-        <style>
-            .page-wrap{
-                width: 800px;
-                display: block;
-                margin: 0 auto;
-            }
 
-            .formlogin{
-                background-color: #ccc;
-                border: 1px solid #ddd;
-                border-radius: 3px;
-                padding: 15px;
-                width: 320px;
-                margin: 0 auto;
-            }
-            input[type="text"] {
-    width: 100%;
-    display: block;
-    border: 1px solid #ccc;
-    padding: 6px 12px;
-    margin-bottom: 20px;
-    font-size: 13px;
-    line-height: 24px;
-    border-radius: 3px;
-}
-            * {
-    box-sizing: border-box;
-}
-.btn-p {
-    color: #fff;
-    background-color: #e53935;
-    text-transform: uppercase;
-    padding: 8px 22px;
-    border: 1px solid #e53935;
-    border-radius: 2px;
-    font-weight: 600;
-    display: inline-block;
-    font-size: 12px;
-    margin: 0 auto;
-}
-.formbtn{
-    text-align: center;
-}
-        </style>
-    </head>
-    <body>
-        <div class="page-wrap">
-            <div class="formlogin">
-                <div class="formgroup">
-                    <input type="text" value="" id="userid" placeholder="Enter User ID"/>
-                </div>
-                <div class="formgroup">
-                    <input type="text" value="" id="name" placeholder="Enter Name"/>
-                </div>
-                <div class="formgroup">
-                    <input type="text" value="" id="age" placeholder="Enter Age"/>
-                </div>
-                <div class="formbtn">
-                    <button class="btn-p" onclick="writeUserData()">Submit</button>
-                </div>
+<head>
+    <title>Firebase CRUD</title>
+    <style>
+        .page-wrap {
+            width: 800px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .formlogin,
+        .firebasetype,
+        .findform {
+            background-color: #ccc;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 15px;
+            width: 320px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            display: block;
+            border: 1px solid #ccc;
+            padding: 6px 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 24px;
+            border-radius: 3px;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        .btn-p {
+            color: #fff;
+            background-color: #e53935;
+            text-transform: uppercase;
+            padding: 8px 22px;
+            border: 1px solid #e53935;
+            border-radius: 2px;
+            font-weight: 600;
+            display: inline-block;
+            font-size: 12px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+        
+        .btn-p.update,
+        .btn-p.find {
+            background-color: #fff;
+            border: 1px solid #e53935;
+            color: #e53935;
+        }
+        
+        .formbtn {
+            text-align: center;
+        }
+        
+        label {
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .firebasetype:after,
+        .findform:after {
+            content: '';
+            position: absolute;
+            display: block;
+            border: 3px solid #ccc;
+            width: 10px;
+            height: 60px;
+        }
+        
+        .findform:after {
+            right: -13px;
+            top: -43px;
+            border-left: 0;
+        }
+        
+        .firebasetype:after {
+            left: -13px;
+            bottom: -43px;
+            border-right: 0;
+        }
+        
+        .info {
+            display: none;
+            padding: 15px;
+            position: fixed;
+            background-color: #fff;
+            z-index: 1;
+            width: 360px;
+            border-radius: 3px;
+            height: 86px;
+            padding: 15px;
+            top: 0;
+            color: #333;
+            left: 0;
+            right: 0;
+            margin: auto;
+            bottom: 0;
+        }
+        
+        .info .close {
+            position: absolute;
+            right: -40px;
+            top: -30px;
+            font-size: 34px;
+            padding: 6px 12px;
+            display: inline-block;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .show .info {
+            display: block;
+        }
+        
+        .show:before {
+            content: '';
+            background-color: rgba(0, 0, 0, 0.7);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+        
+        .message {
+            color: #333;
+            display: block;
+        }
+        
+        select {
+            border: 1px solid #ccc;
+            padding: 8px 16px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrap">
+        <div class="firebasetype">
+            <select onchange="source()">
+                <option value="database">Realtime Database</option>
+                <option value="">Cloud Filestore</option>
+            </select>
+        </div>
+        <div class="formlogin">
+            <div class="formgroup">
+                <input type="text" value="" id="userid" placeholder="Enter User ID" />
+            </div>
+            <div class="formgroup">
+                <input type="text" value="" id="name" placeholder="Enter Name" />
+            </div>
+            <div class="formgroup">
+                <input type="text" value="" id="age" placeholder="Enter Age" />
+            </div>
+            <div class="formbtn">
+                <button class="btn-p" onclick="writeUserData()">Submit</button>
+                <button class="btn-p update" onclick="UpdateUserData()">Update</button>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase.js"></script>
-        <script src="config.js" type="text/javascript"></script>
-        <script src="crud.js" type="text/javascript"></script>
-    </body>    
+
+
+        <div class="findform">
+            <label>Find User :</label>
+            <input type="text" value="" id="findid" placeholder="Enter UserId " />
+            <button class="btn-p find" onclick="findData()">Find</button>
+        </div>
+
+        <div class="info">
+            <span class="close">&times;</span>
+
+            <span class="message"></span>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase.js"></script>
+    <script src="config.js" type="text/javascript"></script>
+    <script src="crud.js" type="text/javascript"></script>
+</body>
+
 </html>
