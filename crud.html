@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Firebase CRUD</title>
+        <style>
+            .page-wrap{
+                width: 800px;
+                display: block;
+                margin: 0 auto;
+            }
+
+            .formlogin{
+                background-color: #ccc;
+                border: 1px solid #ddd;
+                border-radius: 3px;
+                padding: 15px;
+                width: 320px;
+                margin: 0 auto;
+            }
+            input[type="text"] {
+    width: 100%;
+    display: block;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    line-height: 24px;
+    border-radius: 3px;
+}
+            * {
+    box-sizing: border-box;
+}
+.btn-p {
+    color: #fff;
+    background-color: #e53935;
+    text-transform: uppercase;
+    padding: 8px 22px;
+    border: 1px solid #e53935;
+    border-radius: 2px;
+    font-weight: 600;
+    display: inline-block;
+    font-size: 12px;
+    margin: 0 auto;
+}
+.formbtn{
+    text-align: center;
+}
+        </style>
+    </head>
+    <body>
+        <div class="page-wrap">
+            <div class="formlogin">
+                <div class="formgroup">
+                    <input type="text" value="" id="userid" placeholder="Enter User ID"/>
+                </div>
+                <div class="formgroup">
+                    <input type="text" value="" id="name" placeholder="Enter Name"/>
+                </div>
+                <div class="formgroup">
+                    <input type="text" value="" id="age" placeholder="Enter Age"/>
+                </div>
+                <div class="formbtn">
+                    <button class="btn-p" onclick="writeUserData()">Submit</button>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase.js"></script>
+        <script src="config.js" type="text/javascript"></script>
+        <script src="crud.js" type="text/javascript"></script>
+    </body>    
+</html>

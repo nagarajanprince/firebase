@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Download and Upload Files</title>
+</head>
+
+<body>
+    <div class="page-wrap">
+        <header>
+        </header>
+        <div>
+            <label>
+                <input type="file" id="file" multiple>
+            </label>
+            <button id="fileupload" onclick="fileupload()">Submit</button>
+            <br/> File List
+            <ul>
+                <li></li>
+            </ul>
+
+        </div>
+        <footer>
+
+        </footer>
+        <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+
+        <script>
+            // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyBQsHLMhzXUIoiUx7dOfUUccyHfZmBSwLQ",
+                authDomain: "mymusic-player.firebaseapp.com",
+                databaseURL: "https://mymusic-player.firebaseio.com",
+                projectId: "mymusic-player",
+                storageBucket: "mymusic-player.appspot.com",
+                messagingSenderId: "903185846913"
+            };
+            firebase.initializeApp(config);
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+
+        <script>
+            var selectFiles = "";
+            var filelist = [];
+            $("#file").on("change", function (e) {
+                //  selectFiles = e.target.files[0];
+
+                //  console.log(selectFiles.type);
+
+                for (var i = 0; i < $(this).get(0).files.length; ++i) {
+                    filelist.push($(this).get(0).files[i]);
+                }
+
+            });
+            function fileupload() {
+                var downurl = '';
+
+                $.each(filelist, function (i, l) {
+                    var selectFiles = filelist[i];
+
+                    var storageRef = firebase.storage().ref('/images/' + selectFiles.name);
+                    var uploaded = storageRef.put(selectFiles);
+
+                    uploaded.on("state_changed", function (snapshot) {
+                    }, function (error) {
+                        console.log(error);
+                    }, function () {
+                        var progress = (uploaded.snapshot.bytesTransferred / uploaded.snapshot.totalBytes) * 100;
+                        console.log('Upload is ' + progress + '% done');
+                        console.log(uploaded.snapshot.totalBytesTransferred);
+
+                        storageRef.getDownloadURL().then(function(url){
+                            downurl = url;
+                            console.log(url);
+                        });
+
+                    var postKey = firebase.database().ref("filesupload/").push().key;
+                   
+                    var updatedata = {};
+                    var postdata = {
+                        url: downurl
+                    };
+
+                    updatedata["/filesupload/"+postKey] = postdata;
+                    firebase.database().ref().update(updatedata);
+
+
+                    });
+                });
+            }
+
+        </script>
+
+    </div>
+</body>
+
+</html>
